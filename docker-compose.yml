@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: corestock_postgres
+    environment:
+      POSTGRES_DB: corestock
+      POSTGRES_USER: corestock_user
+      POSTGRES_PASSWORD: corestock_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - corestock_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  corestock_postgres_data:
