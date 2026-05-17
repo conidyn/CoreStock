@@ -7,7 +7,10 @@ from app.schemas.stock_movement import (
     StockMovementCreate,
     StockMovementResponse,
 )
-from app.services.stock_movement_service import create_stock_movement_service
+from app.services.stock_movement_service import (
+    create_stock_movement_service,
+    get_stock_movements_service,
+)
 
 router = APIRouter(
     prefix="/stock-movements",
@@ -38,3 +41,13 @@ def create_stock_movement(
             status_code=status.HTTP_409_CONFLICT,
             detail=str(error),
         )
+
+
+@router.get(
+    "",
+    response_model=list[StockMovementResponse],
+)
+def get_stock_movements(
+    db: Session = Depends(get_db),
+):
+    return get_stock_movements_service(db)

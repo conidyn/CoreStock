@@ -31,3 +31,7 @@ def create_stock_movement(
     db.refresh(stock_movement)
 
     return stock_movement
+
+
+def get_stock_movements(db: Session) -> list[StockMovement]:
+    return db.query(StockMovement).order_by(StockMovement.created_at.desc()).all()

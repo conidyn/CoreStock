@@ -4,6 +4,7 @@ from app.models.stock_movement import StockMovement
 from app.repositories.stock_movement_repository import (
     create_stock_movement,
     get_stock_item_by_product_and_location,
+    get_stock_movements,
 )
 from app.schemas.stock_movement import StockMovementCreate
 from app.core.exceptions import NotFoundError, StockInsufficientException
@@ -43,3 +44,7 @@ def create_stock_movement_service(
     db.refresh(stock_movement)
 
     return stock_movement
+
+
+def get_stock_movements_service(db: Session) -> list[StockMovement]:
+    return get_stock_movements(db)
