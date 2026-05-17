@@ -22,6 +22,7 @@ from app.core.database import Base
 from app.models.product import Product
 from app.models.stock_location import StockLocation
 from app.models.stock_item import StockItem
+from app.models.stock_movement import StockMovement
 
 target_metadata = Base.metadata
 
