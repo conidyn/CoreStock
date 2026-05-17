@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.core.database import get_db
 from app.schemas.product import ProductCreate, ProductResponse
-from app.services.product_service import create_product_service
+from app.services.product_service import create_product_service, get_products_service
 from app.core.exceptions import ProductAlreadyExistsException
 
 router = APIRouter(prefix="/products", tags=["Products"])
@@ -19,3 +19,8 @@ def create_product(product_data: ProductCreate, db: Session = Depends(get_db)):
             status_code=status.HTTP_409_CONFLICT,
             detail="Product SKU already exists",
         )
+
+
+@router.get("", response_model=list[ProductResponse])
+def get_products(db: Session = Depends(get_db)):
+    return get_products_service(db)
