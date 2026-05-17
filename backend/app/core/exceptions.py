@@ -4,3 +4,11 @@ class ProductAlreadyExistsException(Exception):
 
 class ConflictError(Exception):
     pass
+
+
+class NotFoundError(Exception):
+    pass
+
+
+class StockInsufficientException(Exception):
+    pass
