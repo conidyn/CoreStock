@@ -21,6 +21,7 @@ if config.config_file_name is not None:
 from app.core.database import Base
 from app.models.product import Product
 from app.models.stock_location import StockLocation
+from app.models.stock_item import StockItem
 
 target_metadata = Base.metadata
 
