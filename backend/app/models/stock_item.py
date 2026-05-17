@@ -1,7 +1,15 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from sqlalchemy import ForeignKey, Integer, UniqueConstraint
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
+
+if TYPE_CHECKING:
+    from app.models.product import Product
+    from app.models.stock_location import StockLocation
 
 
 class StockItem(Base):
@@ -31,4 +39,12 @@ class StockItem(Base):
         Integer,
         nullable=False,
         default=0,
+    )
+
+    product: Mapped["Product"] = relationship(
+        back_populates="stock_items",
+    )
+
+    location: Mapped["StockLocation"] = relationship(
+        back_populates="stock_items",
     )
