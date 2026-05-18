@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Literal
+from app.models.enums import StockMovementType
 
 from pydantic import BaseModel, Field
 
@@ -9,7 +9,7 @@ class StockMovementCreate(BaseModel):
     from_location_id: int = Field(gt=0)
     to_location_id: int = Field(gt=0)
     quantity: int = Field(gt=0)
-    movement_type: Literal["purchase", "sale", "transfer"]
+    movement_type: StockMovementType
     reason: str = Field(min_length=1)
 
 
@@ -19,7 +19,7 @@ class StockMovementResponse(BaseModel):
     from_location_id: int
     to_location_id: int
     quantity: int
-    movement_type: str
+    movement_type: StockMovementType
     reason: str
     created_at: datetime
 

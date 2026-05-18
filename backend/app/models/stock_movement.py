@@ -4,10 +4,11 @@ from typing import TYPE_CHECKING
 
 from datetime import UTC, datetime
 
-from sqlalchemy import DateTime, ForeignKey, Integer, String
+from sqlalchemy import DateTime, Enum, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
+from app.models.enums import StockMovementType
 
 if TYPE_CHECKING:
     from app.models.product import Product
@@ -36,7 +37,14 @@ class StockMovement(Base):
 
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)
 
-    movement_type: Mapped[str] = mapped_column(String, nullable=False)
+    movement_type: Mapped[StockMovementType] = mapped_column(
+        Enum(
+            StockMovementType,
+            name="stock_movement_type",
+            values_callable=lambda enum: [item.value for item in enum],
+        ),
+        nullable=False,
+    )
 
     reason: Mapped[str] = mapped_column(String, nullable=False)
 
