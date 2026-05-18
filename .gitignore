@@ -17,3 +17,7 @@ dist/
 # OS / editor
 .DS_Store
 .vscode/
+
+# Environment variables
+backend/.env
+backend/.env.test
