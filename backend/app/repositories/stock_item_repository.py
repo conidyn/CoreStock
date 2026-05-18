@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from sqlalchemy.exc import IntegrityError
 
 from app.models.stock_item import StockItem
@@ -29,4 +29,11 @@ def create_stock_item(
 
 
 def get_stock_items(db: Session) -> list[StockItem]:
-    return db.query(StockItem).all()
+    return (
+        db.query(StockItem)
+        .options(
+            joinedload(StockItem.product),
+            joinedload(StockItem.location),
+        )
+        .all()
+    )

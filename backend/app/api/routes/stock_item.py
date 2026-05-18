@@ -5,6 +5,7 @@ from app.core.exceptions import ConflictError
 from app.core.database import get_db
 from app.schemas.stock_item import (
     StockItemCreate,
+    StockItemDetailResponse,
     StockItemResponse,
 )
 from app.services.stock_item_service import (
@@ -39,7 +40,7 @@ def create_stock_item(
 
 @router.get(
     "",
-    response_model=list[StockItemResponse],
+    response_model=list[StockItemDetailResponse],
 )
 def get_stock_items(
     db: Session = Depends(get_db),
