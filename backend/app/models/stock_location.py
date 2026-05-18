@@ -2,10 +2,11 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Integer, String
+from sqlalchemy import Enum, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
+from app.models.enums import StockLocationType
 
 if TYPE_CHECKING:
     from app.models.stock_item import StockItem
@@ -19,7 +20,14 @@ class StockLocation(Base):
 
     name: Mapped[str] = mapped_column(String, nullable=False, unique=True)
 
-    type: Mapped[str] = mapped_column(String, nullable=False)
+    type: Mapped[StockLocationType] = mapped_column(
+        Enum(
+            StockLocationType,
+            name="stock_location_type",
+            values_callable=lambda enum: [item.value for item in enum],
+        ),
+        nullable=False,
+    )
 
     stock_items: Mapped[list["StockItem"]] = relationship(
         back_populates="location",
