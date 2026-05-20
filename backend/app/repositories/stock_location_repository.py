@@ -29,3 +29,10 @@ def create_stock_location(
 
 def get_stock_locations(db: Session) -> list[StockLocation]:
     return db.query(StockLocation).all()
+
+
+def get_stock_location_by_id(
+    db: Session,
+    location_id: int,
+) -> StockLocation | None:
+    return db.query(StockLocation).filter(StockLocation.id == location_id).first()

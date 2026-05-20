@@ -111,7 +111,7 @@ def test_create_stock_movement_returns_404_when_source_stock_item_not_found():
     )
 
     assert response.status_code == 404
-    assert response.json()["detail"] == "Source stock item not found"
+    assert response.json()["detail"] == "Source location not found"
 
 
 def test_create_stock_movement_returns_404_when_destination_stock_item_not_found():
@@ -130,4 +130,98 @@ def test_create_stock_movement_returns_404_when_destination_stock_item_not_found
     )
 
     assert response.status_code == 404
-    assert response.json()["detail"] == "Destination stock item not found"
+    assert response.json()["detail"] == "Destination location not found"
+
+
+def test_create_stock_movement_returns_400_when_purchase_locations_are_invalid():
+    product, source_location, destination_location = setup_stock_movement_test_data()
+
+    response = client.post(
+        "/api/stock-movements",
+        json={
+            "product_id": product["id"],
+            "from_location_id": source_location["id"],
+            "to_location_id": destination_location["id"],
+            "quantity": 1,
+            "movement_type": "purchase",
+            "reason": "Invalid purchase movement",
+        },
+    )
+
+    assert response.status_code == 400
+
+    assert response.json()["detail"] == (
+        "Invalid location transfer for movement type 'purchase'"
+    )
+
+
+def test_create_stock_movement_returns_400_when_sale_locations_are_invalid():
+    product, source_location, destination_location = setup_stock_movement_test_data()
+
+    response = client.post(
+        "/api/stock-movements",
+        json={
+            "product_id": product["id"],
+            "from_location_id": source_location["id"],
+            "to_location_id": destination_location["id"],
+            "quantity": 1,
+            "movement_type": "sale",
+            "reason": "Invalid sale movement",
+        },
+    )
+
+    assert response.status_code == 400
+
+    assert response.json()["detail"] == (
+        "Invalid location transfer for movement type 'sale'"
+    )
+
+
+def test_create_stock_movement_returns_400_when_transfer_locations_are_invalid():
+    unique_id = uuid4().hex[:8]
+
+    product = create_product(client, sku=f"TEST-INVALID-TRANSFER-{unique_id}")
+
+    supplier_location = create_stock_location(
+        client,
+        name=f"Test Supplier Location {unique_id}",
+        location_type="supplier",
+    )
+
+    internal_location = create_stock_location(
+        client,
+        name=f"Test Internal Location {unique_id}",
+        location_type="internal",
+    )
+
+    create_stock_item(
+        client,
+        product_id=product["id"],
+        location_id=supplier_location["id"],
+        quantity=10,
+    )
+
+    create_stock_item(
+        client,
+        product_id=product["id"],
+        location_id=internal_location["id"],
+        quantity=0,
+    )
+
+    response = client.post(
+        "/api/stock-movements",
+        json={
+            "product_id": product["id"],
+            "from_location_id": supplier_location["id"],
+            "to_location_id": internal_location["id"],
+            "quantity": 1,
+            "movement_type": "transfer",
+            "reason": "Invalid transfer movement",
+        },
+    )
+
+    assert response.status_code == 400
+
+    assert response.json()["detail"] == (
+        "Invalid location transfer for movement type 'transfer'"
+    )

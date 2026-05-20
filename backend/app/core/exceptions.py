@@ -12,3 +12,7 @@ class NotFoundError(Exception):
 
 class StockInsufficientException(Exception):
     pass
+
+
+class InvalidLocationTransferException(Exception):
+    pass
