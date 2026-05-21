@@ -3,7 +3,12 @@ from uuid import uuid4
 from fastapi.testclient import TestClient
 
 from app.main import app
-from tests.utils import create_product
+from tests.utils import (
+    create_product,
+    create_stock_item,
+    create_stock_location,
+    create_stock_movement,
+)
 
 client = TestClient(app)
 
@@ -54,3 +59,57 @@ def test_create_product_returns_409_for_duplicate_sku():
 
     assert response.status_code == 409
     assert response.json()["detail"] == "Product SKU already exists"
+
+
+def test_get_product_movements_returns_product_movements():
+    unique_id = uuid4().hex[:8]
+
+    product = create_product(client, sku=f"TEST-PRODUCT-MOVEMENTS-{unique_id}")
+
+    source_location = create_stock_location(
+        client,
+        name=f"Test Product Movement Source {unique_id}",
+        location_type="internal",
+    )
+
+    destination_location = create_stock_location(
+        client,
+        name=f"Test Product Movement Destination {unique_id}",
+        location_type="internal",
+    )
+
+    create_stock_item(
+        client,
+        product_id=product["id"],
+        location_id=source_location["id"],
+        quantity=10,
+    )
+
+    create_stock_item(
+        client,
+        product_id=product["id"],
+        location_id=destination_location["id"],
+        quantity=0,
+    )
+
+    create_stock_movement(
+        client=client,
+        product_id=product["id"],
+        from_location_id=source_location["id"],
+        to_location_id=destination_location["id"],
+        quantity=3,
+        movement_type="transfer",
+        reason="Product movement history test",
+    )
+
+    response = client.get(f"/api/products/{product['id']}/movements")
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert len(data) == 1
+    assert data[0]["product_id"] == product["id"]
+    assert data[0]["quantity"] == 3
+    assert data[0]["movement_type"] == "transfer"
+    assert data[0]["reason"] == "Product movement history test"

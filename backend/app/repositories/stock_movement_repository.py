@@ -35,3 +35,15 @@ def create_stock_movement(
 
 def get_stock_movements(db: Session) -> list[StockMovement]:
     return db.query(StockMovement).order_by(StockMovement.created_at.desc()).all()
+
+
+def get_stock_movements_by_product_id(
+    db: Session,
+    product_id: int,
+) -> list[StockMovement]:
+    return (
+        db.query(StockMovement)
+        .filter(StockMovement.product_id == product_id)
+        .order_by(StockMovement.created_at.desc())
+        .all()
+    )
