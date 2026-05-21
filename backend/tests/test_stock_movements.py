@@ -216,3 +216,103 @@ def test_create_stock_movement_returns_400_when_transfer_locations_are_invalid()
     assert response.json()["detail"] == (
         "Invalid location transfer for movement type 'transfer'"
     )
+
+
+def test_create_stock_movement_purchase_returns_201():
+    unique_id = uuid4().hex[:8]
+
+    product = create_product(client, sku=f"TEST-PURCHASE-{unique_id}")
+
+    supplier_location = create_stock_location(
+        client,
+        name=f"Test Supplier Purchase {unique_id}",
+        location_type="supplier",
+    )
+
+    internal_location = create_stock_location(
+        client,
+        name=f"Test Internal Purchase {unique_id}",
+        location_type="internal",
+    )
+
+    create_stock_item(
+        client,
+        product_id=product["id"],
+        location_id=supplier_location["id"],
+        quantity=10,
+    )
+
+    create_stock_item(
+        client,
+        product_id=product["id"],
+        location_id=internal_location["id"],
+        quantity=0,
+    )
+
+    response = create_stock_movement(
+        client=client,
+        product_id=product["id"],
+        from_location_id=supplier_location["id"],
+        to_location_id=internal_location["id"],
+        quantity=5,
+        movement_type="purchase",
+        reason="Valid purchase movement",
+    )
+
+    assert response.status_code == 201
+
+    data = response.json()
+
+    assert data["movement_type"] == "purchase"
+    assert data["quantity"] == 5
+    assert data["reason"] == "Valid purchase movement"
+
+
+def test_create_stock_movement_sale_returns_201():
+    unique_id = uuid4().hex[:8]
+
+    product = create_product(client, sku=f"TEST-SALE-{unique_id}")
+
+    internal_location = create_stock_location(
+        client,
+        name=f"Test Internal Sale {unique_id}",
+        location_type="internal",
+    )
+
+    customer_location = create_stock_location(
+        client,
+        name=f"Test Customer Sale {unique_id}",
+        location_type="customer",
+    )
+
+    create_stock_item(
+        client,
+        product_id=product["id"],
+        location_id=internal_location["id"],
+        quantity=10,
+    )
+
+    create_stock_item(
+        client,
+        product_id=product["id"],
+        location_id=customer_location["id"],
+        quantity=0,
+    )
+
+    response = create_stock_movement(
+        client=client,
+        product_id=product["id"],
+        from_location_id=internal_location["id"],
+        to_location_id=customer_location["id"],
+        quantity=4,
+        movement_type="sale",
+        reason="Valid sale movement",
+    )
+
+    assert response.status_code == 201
+
+    data = response.json()
+
+    assert data["movement_type"] == "sale"
+    assert data["quantity"] == 4
+    assert data["reason"] == "Valid sale movement"
