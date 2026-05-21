@@ -51,3 +51,27 @@ def create_stock_item(
     )
 
     return response.json()
+
+
+def create_stock_movement(
+    client: TestClient,
+    product_id: int,
+    from_location_id: int,
+    to_location_id: int,
+    quantity: int,
+    movement_type: str,
+    reason: str,
+):
+    response = client.post(
+        "/api/stock-movements",
+        json={
+            "product_id": product_id,
+            "from_location_id": from_location_id,
+            "to_location_id": to_location_id,
+            "quantity": quantity,
+            "movement_type": movement_type,
+            "reason": reason,
+        },
+    )
+
+    return response
