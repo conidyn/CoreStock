@@ -10,6 +10,7 @@ from app.schemas.stock_item import (
 )
 from app.services.stock_item_service import (
     create_stock_item_service,
+    get_low_stock_items_service,
     get_stock_items_service,
 )
 
@@ -36,6 +37,16 @@ def create_stock_item(
             status_code=status.HTTP_409_CONFLICT,
             detail=str(error),
         )
+
+
+@router.get(
+    "/low-stock",
+    response_model=list[StockItemDetailResponse],
+)
+def get_low_stock_items(
+    db: Session = Depends(get_db),
+):
+    return get_low_stock_items_service(db)
 
 
 @router.get(
