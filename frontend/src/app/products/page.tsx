@@ -1,4 +1,5 @@
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
+import { ProductTable } from "@/components/products/ProductTable";
 
 export default function ProductsPage() {
     return (
@@ -17,6 +18,7 @@ export default function ProductsPage() {
                         Manage tracked products, SKUs, categories and stock thresholds.
                     </p>
                 </div>
+                <ProductTable />
             </div>
         </DashboardLayout>
     );
