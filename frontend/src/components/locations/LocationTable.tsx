@@ -1,33 +1,12 @@
+import type { StockLocation } from "@/lib/locations-api";
+
 import { Card } from "@/components/ui/Card";
 
-const locations = [
-    {
-        id: 1,
-        name: "Liège Main Warehouse",
-        type: "Internal",
-        city: "Liège",
-        country: "Belgium",
-        status: "Active",
-    },
-    {
-        id: 2,
-        name: "TechSupplier Europe",
-        type: "Supplier",
-        city: "Luxembourg",
-        country: "Luxembourg",
-        status: "Active",
-    },
-    {
-        id: 3,
-        name: "Demo Customer",
-        type: "Customer",
-        city: "Brussels",
-        country: "Belgium",
-        status: "Active",
-    },
-];
+type LocationTableProps = {
+    locations: StockLocation[];
+};
 
-export function LocationTable() {
+export function LocationTable({ locations }: LocationTableProps) {
     return (
         <Card>
             <div className="mb-6">
@@ -43,9 +22,6 @@ export function LocationTable() {
                         <tr className="border-b border-slate-800 text-slate-400">
                             <th className="px-4 py-3 font-medium">Location</th>
                             <th className="px-4 py-3 font-medium">Type</th>
-                            <th className="px-4 py-3 font-medium">City</th>
-                            <th className="px-4 py-3 font-medium">Country</th>
-                            <th className="px-4 py-3 font-medium">Status</th>
                         </tr>
                     </thead>
 
@@ -59,11 +35,6 @@ export function LocationTable() {
                                     {location.name}
                                 </td>
                                 <td className="px-4 py-4 text-slate-400">{location.type}</td>
-                                <td className="px-4 py-4 text-slate-400">{location.city}</td>
-                                <td className="px-4 py-4 text-slate-400">
-                                    {location.country}
-                                </td>
-                                <td className="px-4 py-4 text-slate-400">{location.status}</td>
                             </tr>
                         ))}
                     </tbody>

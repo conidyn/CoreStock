@@ -1,33 +1,11 @@
 import { Card } from "@/components/ui/Card";
+import type { Product } from "@/lib/products-api";
 
-const products = [
-    {
-        id: 1,
-        name: "Dell Latitude 5450",
-        sku: "WH-LIEGE-APP-001",
-        category: "IT Equipment",
-        unit: "unit",
-        minStockThreshold: 5,
-    },
-    {
-        id: 2,
-        name: "Logitech MX Keys",
-        sku: "WH-LIEGE-ACC-002",
-        category: "Accessories",
-        unit: "unit",
-        minStockThreshold: 10,
-    },
-    {
-        id: 3,
-        name: "Zebra Label Printer",
-        sku: "WH-BXL-PRT-003",
-        category: "Warehouse Equipment",
-        unit: "unit",
-        minStockThreshold: 3,
-    },
-];
+type ProductTableProps = {
+    products: Product[];
+};
 
-export function ProductTable() {
+export function ProductTable({ products }: ProductTableProps) {
     return (
         <Card>
             <div className="mb-6">
@@ -66,7 +44,7 @@ export function ProductTable() {
                                 </td>
                                 <td className="px-4 py-4 text-slate-400">{product.unit}</td>
                                 <td className="px-4 py-4 text-slate-400">
-                                    {product.minStockThreshold}
+                                    {product.min_stock_threshold}
                                 </td>
                             </tr>
                         ))}

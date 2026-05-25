@@ -1,7 +1,11 @@
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { ProductTable } from "@/components/products/ProductTable";
+import { getProducts } from "@/lib/products-api";
+export const dynamic = "force-dynamic";
 
-export default function ProductsPage() {
+
+export default async function ProductsPage() {
+    const products = await getProducts();
     return (
         <DashboardLayout>
             <div className="w-full max-w-7xl py-10">
@@ -18,7 +22,7 @@ export default function ProductsPage() {
                         Manage tracked products, SKUs, categories and stock thresholds.
                     </p>
                 </div>
-                <ProductTable />
+                <ProductTable products={products} />
             </div>
         </DashboardLayout>
     );

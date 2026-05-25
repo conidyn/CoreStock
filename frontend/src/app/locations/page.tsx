@@ -1,7 +1,10 @@
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { LocationTable } from "@/components/locations/LocationTable";
+import { getStockLocations } from "@/lib/locations-api";
+export const dynamic = "force-dynamic";
 
-export default function LocationsPage() {
+export default async function LocationsPage() {
+    const locations = await getStockLocations();
     return (
         <DashboardLayout>
             <div className="w-full max-w-7xl py-10">
@@ -18,7 +21,7 @@ export default function LocationsPage() {
                         Monitor warehouses, supplier locations, customer destinations and stock distribution.
                     </p>
                 </div>
-                <LocationTable />
+                <LocationTable locations={locations} />
             </div>
         </DashboardLayout>
     );
