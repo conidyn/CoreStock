@@ -14,6 +14,7 @@ from app.schemas.stock_movement import (
 )
 from app.services.stock_movement_service import (
     create_stock_movement_service,
+    get_recent_stock_movements_service,
     get_stock_movements_service,
 )
 
@@ -52,6 +53,17 @@ def create_stock_movement(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=str(error),
         )
+
+
+@router.get(
+    "/recent",
+    response_model=list[StockMovementResponse],
+)
+def get_recent_stock_movements(
+    limit: int = 10,
+    db: Session = Depends(get_db),
+):
+    return get_recent_stock_movements_service(db, limit=limit)
 
 
 @router.get(

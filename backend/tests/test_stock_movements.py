@@ -316,3 +316,35 @@ def test_create_stock_movement_sale_returns_201():
     assert data["movement_type"] == "sale"
     assert data["quantity"] == 4
     assert data["reason"] == "Valid sale movement"
+
+
+def test_get_recent_stock_movements_respects_limit():
+    product, source_location, destination_location = setup_stock_movement_test_data()
+
+    create_stock_movement(
+        client=client,
+        product_id=product["id"],
+        from_location_id=source_location["id"],
+        to_location_id=destination_location["id"],
+        quantity=1,
+        movement_type="transfer",
+        reason="Recent movement test one",
+    )
+
+    create_stock_movement(
+        client=client,
+        product_id=product["id"],
+        from_location_id=source_location["id"],
+        to_location_id=destination_location["id"],
+        quantity=1,
+        movement_type="transfer",
+        reason="Recent movement test two",
+    )
+
+    response = client.get("/api/stock-movements/recent?limit=1")
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert len(data) == 1

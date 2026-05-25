@@ -33,8 +33,16 @@ def create_stock_movement(
     return stock_movement
 
 
-def get_stock_movements(db: Session) -> list[StockMovement]:
-    return db.query(StockMovement).order_by(StockMovement.created_at.desc()).all()
+def get_stock_movements(
+    db: Session,
+    limit: int | None = None,
+) -> list[StockMovement]:
+    query = db.query(StockMovement).order_by(StockMovement.created_at.desc())
+
+    if limit is not None:
+        query = query.limit(limit)
+
+    return query.all()
 
 
 def get_stock_movements_by_product_id(

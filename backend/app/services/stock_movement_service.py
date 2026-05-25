@@ -105,3 +105,10 @@ def create_stock_movement_service(
 
 def get_stock_movements_service(db: Session) -> list[StockMovement]:
     return get_stock_movements(db)
+
+
+def get_recent_stock_movements_service(
+    db: Session,
+    limit: int = 10,
+) -> list[StockMovement]:
+    return get_stock_movements(db, limit=limit)
