@@ -1,39 +1,12 @@
+import type { StockMovement } from "@/lib/movements-api";
+
 import { Card } from "@/components/ui/Card";
 
-const movements = [
-    {
-        id: 1,
-        product: "Dell Latitude 5450",
-        type: "Purchase",
-        source: "TechSupplier Europe",
-        destination: "Liège Main Warehouse",
-        quantity: 12,
-        date: "2026-05-25",
-        status: "Done",
-    },
-    {
-        id: 2,
-        product: "Logitech MX Keys",
-        type: "Transfer",
-        source: "Liège Main Warehouse",
-        destination: "Brussels Secondary Warehouse",
-        quantity: 5,
-        date: "2026-05-25",
-        status: "Done",
-    },
-    {
-        id: 3,
-        product: "Zebra Label Printer",
-        type: "Sale",
-        source: "Liège Main Warehouse",
-        destination: "Demo Customer",
-        quantity: 2,
-        date: "2026-05-24",
-        status: "Done",
-    },
-];
+type MovementTableProps = {
+    movements: StockMovement[];
+};
 
-export function MovementTable() {
+export function MovementTable({ movements }: MovementTableProps) {
     return (
         <Card>
             <div className="mb-6">
@@ -55,7 +28,7 @@ export function MovementTable() {
                             <th className="px-4 py-3 font-medium">Destination</th>
                             <th className="px-4 py-3 font-medium">Quantity</th>
                             <th className="px-4 py-3 font-medium">Date</th>
-                            <th className="px-4 py-3 font-medium">Status</th>
+                            <th className="px-4 py-3 font-medium">Reason</th>
                         </tr>
                     </thead>
 
@@ -66,18 +39,26 @@ export function MovementTable() {
                                 className="border-b border-slate-800 last:border-0"
                             >
                                 <td className="px-4 py-4 font-medium text-slate-100">
-                                    {movement.product}
+                                    {movement.product.name}
                                 </td>
-                                <td className="px-4 py-4 text-slate-400">{movement.type}</td>
-                                <td className="px-4 py-4 text-slate-400">{movement.source}</td>
                                 <td className="px-4 py-4 text-slate-400">
-                                    {movement.destination}
+                                    {movement.movement_type}
+                                </td>
+                                <td className="px-4 py-4 text-slate-400">
+                                    {movement.from_location.name}
+                                </td>
+                                <td className="px-4 py-4 text-slate-400">
+                                    {movement.to_location.name}
                                 </td>
                                 <td className="px-4 py-4 text-slate-400">
                                     {movement.quantity}
                                 </td>
-                                <td className="px-4 py-4 text-slate-400">{movement.date}</td>
-                                <td className="px-4 py-4 text-slate-400">{movement.status}</td>
+                                <td className="px-4 py-4 text-slate-400">
+                                    {new Date(movement.created_at).toLocaleDateString()}
+                                </td>
+                                <td className="px-4 py-4 text-slate-400">
+                                    {movement.reason}
+                                </td>
                             </tr>
                         ))}
                     </tbody>

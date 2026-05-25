@@ -1,7 +1,10 @@
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { MovementTable } from "@/components/movements/MovementTable";
+import { getStockMovements } from "@/lib/movements-api";
+export const dynamic = "force-dynamic";
 
-export default function MovementsPage() {
+export default async function MovementsPage() {
+    const movements = await getStockMovements();
     return (
         <DashboardLayout>
             <div className="w-full max-w-7xl py-10">
@@ -18,7 +21,7 @@ export default function MovementsPage() {
                         Track incoming, outgoing and internal inventory operations across all locations.
                     </p>
                 </div>
-                <MovementTable />
+                <MovementTable movements={movements} />
             </div>
         </DashboardLayout>
     );
