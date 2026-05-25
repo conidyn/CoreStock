@@ -1,4 +1,5 @@
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
+import { MovementTable } from "@/components/movements/MovementTable";
 
 export default function MovementsPage() {
     return (
@@ -17,6 +18,7 @@ export default function MovementsPage() {
                         Track incoming, outgoing and internal inventory operations across all locations.
                     </p>
                 </div>
+                <MovementTable />
             </div>
         </DashboardLayout>
     );
