@@ -13,6 +13,26 @@ class StockMovementCreate(BaseModel):
     reason: str = Field(min_length=1)
 
 
+class StockMovementProductResponse(BaseModel):
+    id: int
+    name: str
+    sku: str
+
+    model_config = {
+        "from_attributes": True,
+    }
+
+
+class StockMovementLocationResponse(BaseModel):
+    id: int
+    name: str
+    type: str
+
+    model_config = {
+        "from_attributes": True,
+    }
+
+
 class StockMovementResponse(BaseModel):
     id: int
     product_id: int
@@ -22,6 +42,21 @@ class StockMovementResponse(BaseModel):
     movement_type: StockMovementType
     reason: str
     created_at: datetime
+
+    model_config = {
+        "from_attributes": True,
+    }
+
+
+class StockMovementDetailResponse(BaseModel):
+    id: int
+    quantity: int
+    movement_type: StockMovementType
+    reason: str
+    created_at: datetime
+    product: StockMovementProductResponse
+    from_location: StockMovementLocationResponse
+    to_location: StockMovementLocationResponse
 
     model_config = {
         "from_attributes": True,

@@ -10,6 +10,7 @@ from app.core.exceptions import (
 
 from app.schemas.stock_movement import (
     StockMovementCreate,
+    StockMovementDetailResponse,
     StockMovementResponse,
 )
 from app.services.stock_movement_service import (
@@ -57,7 +58,7 @@ def create_stock_movement(
 
 @router.get(
     "/recent",
-    response_model=list[StockMovementResponse],
+    response_model=list[StockMovementDetailResponse],
 )
 def get_recent_stock_movements(
     limit: int = 10,
@@ -68,7 +69,7 @@ def get_recent_stock_movements(
 
 @router.get(
     "",
-    response_model=list[StockMovementResponse],
+    response_model=list[StockMovementDetailResponse],
 )
 def get_stock_movements(
     db: Session = Depends(get_db),
