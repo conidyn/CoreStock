@@ -347,6 +347,7 @@ export function CreateMovementForm({
                                 No products available in selected warehouse.
                             </p>
                         )}
+
                 </div>
 
                 <div>
@@ -365,6 +366,11 @@ export function CreateMovementForm({
                         required
                         className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-slate-100 outline-none"
                     />
+                    {movementType !== "purchase" && availableQuantity !== null && (
+                        <p className="mt-2 text-xs text-slate-500">
+                            Available stock: {availableQuantity} units
+                        </p>
+                    )}
                 </div>
 
                 {errorMessage && (
