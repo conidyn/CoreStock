@@ -20,6 +20,25 @@ def get_stock_item_by_product_and_location(
     )
 
 
+def create_stock_item_for_movement(
+    db: Session,
+    product_id: int,
+    location_id: int,
+    quantity: int = 0,
+) -> StockItem:
+    stock_item = StockItem(
+        product_id=product_id,
+        location_id=location_id,
+        quantity=quantity,
+    )
+
+    db.add(stock_item)
+    db.flush()
+    db.refresh(stock_item)
+
+    return stock_item
+
+
 def create_stock_movement(
     db: Session,
     movement_data: StockMovementCreate,

@@ -10,6 +10,7 @@ from app.models.stock_location import StockLocation
 from app.models.stock_movement import StockMovement
 from app.repositories.stock_location_repository import get_stock_location_by_id
 from app.repositories.stock_movement_repository import (
+    create_stock_item_for_movement,
     create_stock_movement,
     get_stock_item_by_product_and_location,
     get_stock_movements,
@@ -71,29 +72,67 @@ def create_stock_movement_service(
         to_location=to_location,
     )
 
-    source_stock_item = get_stock_item_by_product_and_location(
-        db=db,
-        product_id=movement_data.product_id,
-        location_id=movement_data.from_location_id,
-    )
+    if movement_data.movement_type == StockMovementType.PURCHASE:
+        destination_stock_item = get_stock_item_by_product_and_location(
+            db=db,
+            product_id=movement_data.product_id,
+            location_id=movement_data.to_location_id,
+        )
 
-    if source_stock_item is None:
-        raise NotFoundError("Source stock item not found")
+        if destination_stock_item is None:
+            destination_stock_item = create_stock_item_for_movement(
+                db=db,
+                product_id=movement_data.product_id,
+                location_id=movement_data.to_location_id,
+                quantity=0,
+            )
 
-    destination_stock_item = get_stock_item_by_product_and_location(
-        db=db,
-        product_id=movement_data.product_id,
-        location_id=movement_data.to_location_id,
-    )
+        destination_stock_item.quantity += movement_data.quantity
 
-    if destination_stock_item is None:
-        raise NotFoundError("Destination stock item not found")
+    elif movement_data.movement_type == StockMovementType.SALE:
+        source_stock_item = get_stock_item_by_product_and_location(
+            db=db,
+            product_id=movement_data.product_id,
+            location_id=movement_data.from_location_id,
+        )
 
-    if source_stock_item.quantity < movement_data.quantity:
-        raise StockInsufficientException("Not enough stock available")
+        if source_stock_item is None:
+            raise NotFoundError("Source stock item not found")
 
-    source_stock_item.quantity -= movement_data.quantity
-    destination_stock_item.quantity += movement_data.quantity
+        if source_stock_item.quantity < movement_data.quantity:
+            raise StockInsufficientException("Not enough stock available")
+
+        source_stock_item.quantity -= movement_data.quantity
+
+    elif movement_data.movement_type == StockMovementType.TRANSFER:
+        source_stock_item = get_stock_item_by_product_and_location(
+            db=db,
+            product_id=movement_data.product_id,
+            location_id=movement_data.from_location_id,
+        )
+
+        if source_stock_item is None:
+            raise NotFoundError("Source stock item not found")
+
+        destination_stock_item = get_stock_item_by_product_and_location(
+            db=db,
+            product_id=movement_data.product_id,
+            location_id=movement_data.to_location_id,
+        )
+
+        if destination_stock_item is None:
+            destination_stock_item = create_stock_item_for_movement(
+                db=db,
+                product_id=movement_data.product_id,
+                location_id=movement_data.to_location_id,
+                quantity=0,
+            )
+
+        if source_stock_item.quantity < movement_data.quantity:
+            raise StockInsufficientException("Not enough stock available")
+
+        source_stock_item.quantity -= movement_data.quantity
+        destination_stock_item.quantity += movement_data.quantity
 
     stock_movement = create_stock_movement(db, movement_data)
 

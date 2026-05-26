@@ -238,13 +238,6 @@ def test_create_stock_movement_purchase_returns_201():
     create_stock_item(
         client,
         product_id=product["id"],
-        location_id=supplier_location["id"],
-        quantity=10,
-    )
-
-    create_stock_item(
-        client,
-        product_id=product["id"],
         location_id=internal_location["id"],
         quantity=0,
     )
@@ -290,13 +283,6 @@ def test_create_stock_movement_sale_returns_201():
         product_id=product["id"],
         location_id=internal_location["id"],
         quantity=10,
-    )
-
-    create_stock_item(
-        client,
-        product_id=product["id"],
-        location_id=customer_location["id"],
-        quantity=0,
     )
 
     response = create_stock_movement(
