@@ -10,10 +10,12 @@ import {
 } from "@/lib/movements-api";
 import { Product } from "@/lib/products-api";
 import { StockLocation } from "@/lib/locations-api";
+import { StockItem } from "@/lib/stock-items-api";
 
 type CreateMovementFormProps = {
     products: Product[];
     locations: StockLocation[];
+    stockItems: StockItem[];
 };
 
 type MovementType = CreateStockMovementPayload["movement_type"];
@@ -46,6 +48,7 @@ const movementRules: Record<
 export function CreateMovementForm({
     products,
     locations,
+    stockItems,
 }: CreateMovementFormProps) {
     const router = useRouter();
 
@@ -85,6 +88,28 @@ export function CreateMovementForm({
             }),
         [locations, currentRule.destinationType, movementType, fromLocationId]
     );
+
+    const availableProducts = useMemo(() => {
+        if (movementType === "purchase") {
+            return products;
+        }
+
+        if (!fromLocationId) {
+            return [];
+        }
+
+        const availableProductIds = new Set(
+            stockItems
+                .filter(
+                    (stockItem) =>
+                        stockItem.location.id === Number(fromLocationId) &&
+                        stockItem.quantity > 0
+                )
+                .map((stockItem) => stockItem.product.id)
+        );
+
+        return products.filter((product) => availableProductIds.has(product.id));
+    }, [products, stockItems, movementType, fromLocationId]);
 
     function handleMovementTypeChange(value: MovementType) {
         setMovementType(value);
@@ -222,6 +247,7 @@ export function CreateMovementForm({
                         onChange={(event) => {
                             setFromLocationId(event.target.value);
                             setToLocationId("");
+                            setProductId("");
                         }}
                         required
                         className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-slate-100 outline-none"
@@ -266,9 +292,13 @@ export function CreateMovementForm({
                         required
                         className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-slate-100 outline-none"
                     >
-                        <option value="">Select a product</option>
+                        <option value="">
+                            {movementType === "purchase" || fromLocationId
+                                ? "Select a product"
+                                : "Select a source location first"}
+                        </option>
 
-                        {products.map((product) => (
+                        {availableProducts.map((product) => (
                             <option key={product.id} value={product.id}>
                                 {product.name}
                             </option>

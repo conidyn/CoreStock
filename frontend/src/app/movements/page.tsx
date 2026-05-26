@@ -4,12 +4,14 @@ import { getStockMovements } from "@/lib/movements-api";
 import { CreateMovementForm } from "@/components/movements/CreateMovementForm";
 import { getProducts } from "@/lib/products-api";
 import { getStockLocations } from "@/lib/locations-api";
+import { getStockItems } from "@/lib/stock-items-api";
 export const dynamic = "force-dynamic";
 
 export default async function MovementsPage() {
     const movements = await getStockMovements();
     const products = await getProducts();
     const locations = await getStockLocations();
+    const stockItems = await getStockItems();
     return (
         <DashboardLayout>
             <div className="w-full max-w-7xl py-10">
@@ -27,7 +29,11 @@ export default async function MovementsPage() {
                     </p>
                 </div>
                 <div className="mb-6">
-                    <CreateMovementForm products={products} locations={locations} />
+                    <CreateMovementForm
+                        products={products}
+                        locations={locations}
+                        stockItems={stockItems}
+                    />
                 </div>
                 <MovementTable movements={movements} />
             </div>
