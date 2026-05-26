@@ -23,12 +23,43 @@ export type StockMovement = {
   to_location: MovementLocation;
 };
 
+export type CreateStockMovementPayload = {
+  product_id: number;
+  from_location_id: number;
+  to_location_id: number;
+  quantity: number;
+  movement_type: "purchase" | "sale" | "transfer";
+  reason: string;
+};
+
 export async function getStockMovements(): Promise<StockMovement[]> {
   const response = await fetch(`${API_BASE_URL}/api/stock-movements`);
 
   if (!response.ok) {
     throw new Error("Failed to fetch stock movements");
   }
+
+  return response.json();
+}
+
+export async function createStockMovement(
+  payload: CreateStockMovementPayload
+): Promise<StockMovement> {
+  const response = await fetch(`${API_BASE_URL}/api/stock-movements`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+  const errorData = await response.json();
+
+  throw new Error(
+    errorData.detail || "Failed to create stock movement"
+  );
+}
 
   return response.json();
 }
