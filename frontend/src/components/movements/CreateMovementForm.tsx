@@ -144,25 +144,6 @@ export function CreateMovementForm({
 
             <form onSubmit={handleSubmit} className="grid gap-4 md:grid-cols-2">
                 <div>
-                    <label className="mb-2 block text-sm text-slate-400">Product</label>
-
-                    <select
-                        value={productId}
-                        onChange={(event) => setProductId(event.target.value)}
-                        required
-                        className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-slate-100 outline-none"
-                    >
-                        <option value="">Select a product</option>
-
-                        {products.map((product) => (
-                            <option key={product.id} value={product.id}>
-                                {product.name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                <div>
                     <label className="mb-2 block text-sm text-slate-400">
                         Movement type
                     </label>
@@ -178,6 +159,19 @@ export function CreateMovementForm({
                         <option value="transfer">Transfer</option>
                         <option value="sale">Sale</option>
                     </select>
+                </div>
+
+                <div>
+                    <label className="mb-2 block text-sm text-slate-400">Reason</label>
+
+                    <input
+                        type="text"
+                        value={reason}
+                        onChange={(event) => setReason(event.target.value)}
+                        placeholder="Movement reason"
+                        required
+                        className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-slate-100 outline-none"
+                    />
                 </div>
 
                 <div>
@@ -223,6 +217,25 @@ export function CreateMovementForm({
                 </div>
 
                 <div>
+                    <label className="mb-2 block text-sm text-slate-400">Product</label>
+
+                    <select
+                        value={productId}
+                        onChange={(event) => setProductId(event.target.value)}
+                        required
+                        className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-slate-100 outline-none"
+                    >
+                        <option value="">Select a product</option>
+
+                        {products.map((product) => (
+                            <option key={product.id} value={product.id}>
+                                {product.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                <div>
                     <label className="mb-2 block text-sm text-slate-400">Quantity</label>
 
                     <input
@@ -230,19 +243,6 @@ export function CreateMovementForm({
                         min="1"
                         value={quantity}
                         onChange={(event) => setQuantity(event.target.value)}
-                        required
-                        className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-slate-100 outline-none"
-                    />
-                </div>
-
-                <div>
-                    <label className="mb-2 block text-sm text-slate-400">Reason</label>
-
-                    <input
-                        type="text"
-                        value={reason}
-                        onChange={(event) => setReason(event.target.value)}
-                        placeholder="Movement reason"
                         required
                         className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-slate-100 outline-none"
                     />
