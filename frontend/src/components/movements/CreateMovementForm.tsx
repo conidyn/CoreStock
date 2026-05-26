@@ -111,10 +111,28 @@ export function CreateMovementForm({
         return products.filter((product) => availableProductIds.has(product.id));
     }, [products, stockItems, movementType, fromLocationId]);
 
+    const selectedStockItem = useMemo(() => {
+        if (movementType === "purchase" || !fromLocationId || !productId) {
+            return null;
+        }
+
+        return (
+            stockItems.find(
+                (stockItem) =>
+                    stockItem.location.id === Number(fromLocationId) &&
+                    stockItem.product.id === Number(productId)
+            ) ?? null
+        );
+    }, [stockItems, movementType, fromLocationId, productId]);
+
+    const availableQuantity = selectedStockItem?.quantity ?? null;
+
     function handleMovementTypeChange(value: MovementType) {
         setMovementType(value);
         setFromLocationId("");
         setToLocationId("");
+        setProductId("");
+        setQuantity("");
         setErrorMessage(null);
         setSuccessMessage(null);
     }
@@ -154,6 +172,17 @@ export function CreateMovementForm({
             setErrorMessage("Please complete all fields before creating a movement.");
             return;
         }
+        if (
+            movementType !== "purchase" &&
+            availableQuantity !== null &&
+            Number(quantity) > availableQuantity
+        ) {
+            setErrorMessage(
+                `Quantity cannot exceed available stock (${availableQuantity}).`
+            );
+
+            return;
+        }
 
         setIsSubmitting(true);
         setErrorMessage(null);
@@ -168,14 +197,14 @@ export function CreateMovementForm({
                 movement_type: movementType,
                 reason,
             });
-
+            const successMessage = buildSuccessMessage();
             setProductId("");
             setMovementType("purchase");
             setFromLocationId("");
             setToLocationId("");
             setQuantity("");
             setReason("");
-            setSuccessMessage(buildSuccessMessage());
+            setSuccessMessage(successMessage);
 
             router.refresh();
         } catch (error) {
@@ -288,9 +317,16 @@ export function CreateMovementForm({
 
                     <select
                         value={productId}
-                        onChange={(event) => setProductId(event.target.value)}
+                        onChange={(event) => {
+                            setProductId(event.target.value);
+                            setQuantity("");
+                        }}
+                        disabled={
+                            movementType !== "purchase" &&
+                            !fromLocationId
+                        }
                         required
-                        className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-slate-100 outline-none"
+                        className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-slate-100 outline-none disabled:cursor-not-allowed disabled:opacity-50"
                     >
                         <option value="">
                             {movementType === "purchase" || fromLocationId
@@ -304,6 +340,13 @@ export function CreateMovementForm({
                             </option>
                         ))}
                     </select>
+                    {movementType !== "purchase" &&
+                        fromLocationId &&
+                        availableProducts.length === 0 && (
+                            <p className="mt-2 text-xs text-amber-400">
+                                No products available in selected warehouse.
+                            </p>
+                        )}
                 </div>
 
                 <div>
@@ -312,6 +355,11 @@ export function CreateMovementForm({
                     <input
                         type="number"
                         min="1"
+                        max={
+                            movementType === "purchase"
+                                ? undefined
+                                : availableQuantity ?? undefined
+                        }
                         value={quantity}
                         onChange={(event) => setQuantity(event.target.value)}
                         required
@@ -332,7 +380,13 @@ export function CreateMovementForm({
                 <div className="md:col-span-2">
                     <button
                         type="submit"
-                        disabled={isSubmitting}
+                        disabled={
+                            isSubmitting ||
+                            (
+                                movementType !== "purchase" &&
+                                availableProducts.length === 0
+                            )
+                        }
                         className="rounded-xl bg-slate-100 px-5 py-3 text-sm font-medium text-slate-950 transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-60"
                     >
                         {isSubmitting ? "Creating..." : "Create movement"}
