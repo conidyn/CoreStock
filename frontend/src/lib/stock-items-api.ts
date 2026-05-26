@@ -4,6 +4,7 @@ export type StockItemProduct = {
   id: number;
   name: string;
   sku: string;
+  min_stock_threshold: number;
 };
 
 export type StockItemLocation = {

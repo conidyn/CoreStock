@@ -60,7 +60,7 @@ export default async function HomePage() {
             <RecentMovements />
           </div>
 
-          <LowStockAlerts />
+          <LowStockAlerts stockItems={stockItems} />
         </div>
       </div>
     </DashboardLayout>

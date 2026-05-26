@@ -11,6 +11,7 @@ class StockItemProductResponse(BaseModel):
     id: int
     name: str
     sku: str
+    min_stock_threshold: int
 
     model_config = {
         "from_attributes": True,
