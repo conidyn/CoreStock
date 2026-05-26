@@ -70,10 +70,20 @@ export function CreateMovementForm({
 
     const destinationLocations = useMemo(
         () =>
-            locations.filter(
-                (location) => location.type === currentRule.destinationType
-            ),
-        [locations, currentRule.destinationType]
+            locations.filter((location) => {
+                const matchesDestinationType =
+                    location.type === currentRule.destinationType;
+
+                if (movementType !== "transfer") {
+                    return matchesDestinationType;
+                }
+
+                return (
+                    matchesDestinationType &&
+                    location.id !== Number(fromLocationId)
+                );
+            }),
+        [locations, currentRule.destinationType, movementType, fromLocationId]
     );
 
     function handleMovementTypeChange(value: MovementType) {
@@ -82,6 +92,34 @@ export function CreateMovementForm({
         setToLocationId("");
         setErrorMessage(null);
         setSuccessMessage(null);
+    }
+
+    function buildSuccessMessage() {
+        const selectedProduct = products.find(
+            (product) => product.id === Number(productId)
+        );
+
+        const sourceLocation = locations.find(
+            (location) => location.id === Number(fromLocationId)
+        );
+
+        const destinationLocation = locations.find(
+            (location) => location.id === Number(toLocationId)
+        );
+
+        if (!selectedProduct || !sourceLocation || !destinationLocation) {
+            return "Stock movement created successfully.";
+        }
+
+        if (movementType === "purchase") {
+            return `Purchased ${quantity} ${selectedProduct.name} into ${destinationLocation.name}.`;
+        }
+
+        if (movementType === "transfer") {
+            return `Transferred ${quantity} ${selectedProduct.name} from ${sourceLocation.name} to ${destinationLocation.name}.`;
+        }
+
+        return `Sold ${quantity} ${selectedProduct.name} to ${destinationLocation.name}.`;
     }
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -112,7 +150,7 @@ export function CreateMovementForm({
             setToLocationId("");
             setQuantity("");
             setReason("");
-            setSuccessMessage("Stock movement created successfully.");
+            setSuccessMessage(buildSuccessMessage());
 
             router.refresh();
         } catch (error) {
@@ -181,7 +219,10 @@ export function CreateMovementForm({
 
                     <select
                         value={fromLocationId}
-                        onChange={(event) => setFromLocationId(event.target.value)}
+                        onChange={(event) => {
+                            setFromLocationId(event.target.value);
+                            setToLocationId("");
+                        }}
                         required
                         className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-slate-100 outline-none"
                     >
