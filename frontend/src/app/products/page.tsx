@@ -1,11 +1,14 @@
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { ProductTable } from "@/components/products/ProductTable";
 import { getProducts } from "@/lib/products-api";
-export const dynamic = "force-dynamic";
+import { getStockItems } from "@/lib/stock-items-api";
 
+export const dynamic = "force-dynamic";
 
 export default async function ProductsPage() {
     const products = await getProducts();
+    const stockItems = await getStockItems();
+
     return (
         <DashboardLayout>
             <div className="w-full max-w-7xl py-10">
@@ -19,10 +22,11 @@ export default async function ProductsPage() {
                     </h1>
 
                     <p className="mt-3 text-lg text-slate-400">
-                        Manage tracked products, SKUs, categories and stock thresholds.
+                        Track products, SKUs, categories, stock thresholds and total inventory across warehouses.
                     </p>
                 </div>
-                <ProductTable products={products} />
+
+                <ProductTable products={products} stockItems={stockItems} />
             </div>
         </DashboardLayout>
     );

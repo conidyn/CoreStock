@@ -1,11 +1,19 @@
 import { Card } from "@/components/ui/Card";
 import type { Product } from "@/lib/products-api";
+import type { StockItem } from "@/lib/stock-items-api";
 
 type ProductTableProps = {
     products: Product[];
+    stockItems: StockItem[];
 };
 
-export function ProductTable({ products }: ProductTableProps) {
+function getTotalStockForProduct(productId: number, stockItems: StockItem[]) {
+    return stockItems
+        .filter((stockItem) => stockItem.product.id === productId)
+        .reduce((total, stockItem) => total + stockItem.quantity, 0);
+}
+
+export function ProductTable({ products, stockItems }: ProductTableProps) {
     return (
         <Card>
             <div className="mb-6">
@@ -13,7 +21,7 @@ export function ProductTable({ products }: ProductTableProps) {
                     Products
                 </h2>
                 <p className="mt-1 text-sm text-slate-500">
-                    Demo product catalog with SKU, category and stock threshold.
+                    Product catalog with SKU, category, stock threshold and current total stock.
                 </p>
             </div>
 
@@ -26,28 +34,45 @@ export function ProductTable({ products }: ProductTableProps) {
                             <th className="px-4 py-3 font-medium">Category</th>
                             <th className="px-4 py-3 font-medium">Unit</th>
                             <th className="px-4 py-3 font-medium">Min. stock</th>
+                            <th className="px-4 py-3 font-medium text-right">
+                                Total stock
+                            </th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        {products.map((product) => (
-                            <tr
-                                key={product.id}
-                                className="border-b border-slate-800 last:border-0"
-                            >
-                                <td className="px-4 py-4 font-medium text-slate-100">
-                                    {product.name}
-                                </td>
-                                <td className="px-4 py-4 text-slate-400">{product.sku}</td>
-                                <td className="px-4 py-4 text-slate-400">
-                                    {product.category}
-                                </td>
-                                <td className="px-4 py-4 text-slate-400">{product.unit}</td>
-                                <td className="px-4 py-4 text-slate-400">
-                                    {product.min_stock_threshold}
-                                </td>
-                            </tr>
-                        ))}
+                        {products.map((product) => {
+                            const totalStock = getTotalStockForProduct(
+                                product.id,
+                                stockItems
+                            );
+
+                            return (
+                                <tr
+                                    key={product.id}
+                                    className="border-b border-slate-800 last:border-0"
+                                >
+                                    <td className="px-4 py-4 font-medium text-slate-100">
+                                        {product.name}
+                                    </td>
+                                    <td className="px-4 py-4 text-slate-400">
+                                        {product.sku}
+                                    </td>
+                                    <td className="px-4 py-4 text-slate-400">
+                                        {product.category}
+                                    </td>
+                                    <td className="px-4 py-4 text-slate-400">
+                                        {product.unit}
+                                    </td>
+                                    <td className="px-4 py-4 text-slate-400">
+                                        {product.min_stock_threshold}
+                                    </td>
+                                    <td className="px-4 py-4 text-right font-medium text-slate-100">
+                                        {totalStock} {product.unit}
+                                    </td>
+                                </tr>
+                            );
+                        })}
                     </tbody>
                 </table>
             </div>
