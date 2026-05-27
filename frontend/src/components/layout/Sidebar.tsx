@@ -20,6 +20,14 @@ const navigationItems: NavigationItem[] = [
         label: "Movements",
         href: "/movements",
     },
+    {
+        label: "Contact Creator",
+        href: "/contact",
+    },
+    {
+        label: "Demo Data Controls",
+        href: "/demo-controls",
+    },
 ];
 
 export function Sidebar() {
@@ -31,7 +39,7 @@ export function Sidebar() {
                 </p>
 
                 <h1 className="mt-2 text-2xl font-bold text-slate-100">
-                    ERP Platform
+                    Warehouse Management
                 </h1>
             </div>
 
