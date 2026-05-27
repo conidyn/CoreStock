@@ -5,11 +5,14 @@ import { LowStockAlerts } from "@/components/dashboard/LowStockAlerts";
 import { getDashboardStats } from "@/lib/stats-api";
 import { StockByLocation } from "@/components/dashboard/StockByLocation";
 import { getStockItems } from "@/lib/stock-items-api";
+import { getRecentStockMovements } from "@/lib/movements-api";
+
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const stats = await getDashboardStats();
   const stockItems = await getStockItems();
+  const recentMovements = await getRecentStockMovements(5);
   return (
     <DashboardLayout>
       <div className="w-full max-w-7xl py-10">
@@ -57,10 +60,12 @@ export default async function HomePage() {
         </div>
         <div className="mt-6 grid gap-6 xl:grid-cols-3">
           <div className="xl:col-span-2">
-            <RecentMovements />
+            <RecentMovements movements={recentMovements} />
           </div>
 
-          <LowStockAlerts stockItems={stockItems} />
+          <div className="self-start">
+            <LowStockAlerts stockItems={stockItems} />
+          </div>
         </div>
       </div>
     </DashboardLayout>

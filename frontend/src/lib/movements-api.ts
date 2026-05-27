@@ -42,6 +42,23 @@ export async function getStockMovements(): Promise<StockMovement[]> {
   return response.json();
 }
 
+export async function getRecentStockMovements(
+  limit = 5
+): Promise<StockMovement[]> {
+  const response = await fetch(
+    `${API_BASE_URL}/api/stock-movements/recent?limit=${limit}`,
+    {
+      cache: "no-store",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch recent stock movements");
+  }
+
+  return response.json();
+}
+
 export async function createStockMovement(
   payload: CreateStockMovementPayload
 ): Promise<StockMovement> {
@@ -54,12 +71,12 @@ export async function createStockMovement(
   });
 
   if (!response.ok) {
-  const errorData = await response.json();
+    const errorData = await response.json();
 
-  throw new Error(
-    errorData.detail || "Failed to create stock movement"
-  );
-}
+    throw new Error(
+      errorData.detail || "Failed to create stock movement"
+    );
+  }
 
   return response.json();
 }
