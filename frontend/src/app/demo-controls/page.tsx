@@ -1,4 +1,5 @@
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
+import { DemoResetControl } from "@/components/demo/DemoResetControl";
 
 export default function DemoControlsPage() {
     return (
@@ -49,24 +50,7 @@ export default function DemoControlsPage() {
                                 again from a clean and consistent state.
                             </p>
                         </div>
-
-                        <div className="mt-8 flex flex-col items-start gap-4">
-                            <p className="text-sm text-slate-500">
-                                Demo reset cooldown: 5 minutes
-                            </p>
-
-                            <button
-                                disabled
-                                className="rounded-xl border border-slate-700 bg-slate-900 px-6 py-3 text-sm font-semibold text-slate-500"
-                            >
-                                Reset Demo Environment
-                            </button>
-
-                            <p className="text-xs text-slate-600">
-                                Demo reset endpoint will be connected in a
-                                future update.
-                            </p>
-                        </div>
+                        <DemoResetControl />
                     </div>
                 </section>
             </div>
