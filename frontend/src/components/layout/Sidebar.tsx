@@ -48,7 +48,10 @@ export function Sidebar() {
                     <a
                         key={item.label}
                         href={item.href}
-                        className="rounded-lg px-4 py-3 text-sm font-medium text-slate-400 transition hover:bg-slate-900 hover:text-slate-100"
+                        className={`rounded-lg px-4 py-3 text-sm font-medium transition ${item.label === "Demo Data Controls"
+                            ? "mt-10 border border-blue-500/20 bg-slate-900 text-center text-slate-200 hover:border-blue-400/40 hover:bg-slate-800"
+                            : "text-slate-400 hover:bg-slate-900 hover:text-slate-100"
+                            }`}
                     >
                         {item.label}
                     </a>
