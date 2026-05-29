@@ -1,4 +1,5 @@
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
+import Image from "next/image";
 
 const links = [
     {
@@ -25,10 +26,12 @@ export default function ContactPage() {
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.18),transparent_45%)]" />
 
                     <div className="relative z-10 flex flex-col items-center text-center">
-                        <img
+                        <Image
                             src="/creator/nd-logo.svg"
                             alt="Nicolas Doyen logo"
-                            className="h-28 w-28 rounded-2xl border border-slate-800 bg-white p-4"
+                            width={112}
+                            height={112}
+                            className="rounded-2xl border border-slate-800 bg-white p-4"
                         />
 
                         <p className="mt-6 text-xs font-semibold uppercase tracking-[0.35em] text-blue-300">
