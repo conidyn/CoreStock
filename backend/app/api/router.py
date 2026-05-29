@@ -6,10 +6,12 @@ from app.api.routes.stock_location import router as stock_location_router
 from app.api.routes.stock_item import router as stock_item_router
 from app.api.routes.stock_movement import router as stock_movement_router
 from app.api.routes.stats import router as stats_router
+from app.api.routes.demo import router as demo_router
 
 api_router = APIRouter()
 
 api_router.include_router(health_router)
+api_router.include_router(demo_router)
 api_router.include_router(stats_router)
 api_router.include_router(product_router)
 api_router.include_router(stock_location_router)
