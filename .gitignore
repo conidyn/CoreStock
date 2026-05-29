@@ -5,19 +5,30 @@ __pycache__/
 *.py[cod]
 .venv/
 venv/
-.env
 
 # Node / Next.js
 node_modules/
 .next/
 out/
 dist/
-.env.local
+
+# Environment variables
+.env
+.env.*
+!.env.example
 
 # OS / editor
 .DS_Store
 .vscode/
 
-# Environment variables
-backend/.env
-backend/.env.test
+# Python cache
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Coverage
+.coverage
+htmlcov/
+
+# Logs
+*.log
