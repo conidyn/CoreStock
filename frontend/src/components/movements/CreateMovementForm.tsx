@@ -262,6 +262,8 @@ export function CreateMovementForm({
                         onChange={(event) => setReason(event.target.value)}
                         placeholder="Movement reason"
                         required
+                        minLength={3}
+                        maxLength={50}
                         className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-slate-100 outline-none"
                     />
                 </div>

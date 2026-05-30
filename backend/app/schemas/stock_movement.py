@@ -1,7 +1,7 @@
 from datetime import datetime
 from app.models.enums import StockMovementType
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class StockMovementCreate(BaseModel):
@@ -10,7 +10,17 @@ class StockMovementCreate(BaseModel):
     to_location_id: int = Field(gt=0)
     quantity: int = Field(gt=0)
     movement_type: StockMovementType
-    reason: str = Field(min_length=1)
+    reason: str = Field(min_length=3, max_length=160)
+
+    @field_validator("reason")
+    @classmethod
+    def clean_reason(cls, value: str) -> str:
+        cleaned_value = value.strip()
+
+        if not cleaned_value:
+            raise ValueError("Reason is required")
+
+        return cleaned_value
 
 
 class StockMovementProductResponse(BaseModel):
