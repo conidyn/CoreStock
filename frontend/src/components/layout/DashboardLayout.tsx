@@ -13,8 +13,8 @@ export function DashboardLayout({
         <main className="flex min-h-screen bg-slate-950 text-slate-100">
             <Sidebar />
 
-            <section className="flex flex-1">
-                <div className="flex w-full items-center justify-center px-6">
+            <section className="flex min-w-0 flex-1 pt-44 lg:pt-0">
+                <div className="flex w-full min-w-0 justify-center px-4 md:px-6">
                     {children}
                 </div>
             </section>

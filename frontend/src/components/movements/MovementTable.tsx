@@ -16,6 +16,10 @@ export function MovementTable({ movements }: MovementTableProps) {
                 <p className="mt-1 text-sm text-slate-500">
                     Traceability of purchase, sale and internal transfer operations.
                 </p>
+                <p className="mt-2 text-center text-xs text-slate-600 md:hidden">
+                    ← Swipe →
+                </p>
+
             </div>
 
             <div className="overflow-x-auto rounded-xl border border-slate-800">

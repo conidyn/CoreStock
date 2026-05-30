@@ -23,10 +23,13 @@ export function ProductTable({ products, stockItems }: ProductTableProps) {
                 <p className="mt-1 text-sm text-slate-500">
                     Product catalog with SKU, category, stock threshold and current total stock.
                 </p>
+                <p className="mt-2 text-center text-xs text-slate-600 md:hidden">
+                    ← Swipe →
+                </p>
             </div>
 
-            <div className="overflow-hidden rounded-xl border border-slate-800">
-                <table className="w-full border-collapse text-left text-sm">
+            <div className="overflow-x-auto rounded-xl border border-slate-800">
+                <table className="min-w-[720px] border-collapse text-left text-sm">
                     <thead className="bg-slate-900">
                         <tr className="border-b border-slate-800 text-slate-400">
                             <th className="px-4 py-3 font-medium">Product</th>
