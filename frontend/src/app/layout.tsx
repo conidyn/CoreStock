@@ -19,6 +19,29 @@ export const metadata: Metadata = {
     "Inventory and warehouse management platform built to explore stock traceability, warehouse operations and ERP-inspired business workflows.",
 
   applicationName: "CoreStock",
+
+  openGraph: {
+    title: "CoreStock",
+    description:
+      "Inventory and warehouse management platform built to explore stock traceability, warehouse operations and ERP-inspired business workflows.",
+    type: "website",
+    images: [
+      {
+        url: "/og/corestock-og.svg",
+        width: 1200,
+        height: 630,
+        alt: "CoreStock",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "CoreStock",
+    description:
+      "Inventory and warehouse management platform built to explore stock traceability, warehouse operations and ERP-inspired business workflows.",
+    images: ["/og/corestock-og.svg"],
+  },
 };
 
 export default function RootLayout({

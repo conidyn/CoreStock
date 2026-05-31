@@ -1,0 +1,26 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<rect width="1200" height="630" fill="#020617"></rect>
+
+<defs>
+    <radialGradient id="glow" cx="50%" cy="50%">
+        <stop offset="0%" stop-color="#1E3A8A" stop-opacity="0.22"></stop>
+        <stop offset="100%" stop-color="#020617" stop-opacity="0"></stop>
+    </radialGradient>
+</defs>
+
+<circle cx="600" cy="315" r="420" fill="url(#glow)"></circle>
+
+<text x="600" y="285" fill="#F8FAFC" font-size="88" font-family="Inter, Arial" font-weight="700" text-anchor="middle">
+CoreStock
+</text>
+
+<text x="600" y="365" fill="#94A3B8" font-size="34" font-family="Inter, Arial" text-anchor="middle">
+Inventory &amp; Warehouse Management
+</text>
+
+<text x="600" y="470" fill="#64748B" font-size="26" font-family="Inter, Arial" text-anchor="middle">
+Stock • Warehouses • Traceability
+</text>
+
+</svg>
