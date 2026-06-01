@@ -11,16 +11,29 @@ export async function POST() {
     );
   }
 
-  const response = await fetch(`${API_BASE_URL}/api/demo/reset`, {
-    method: "POST",
-    headers: {
-      "X-Demo-Token": demoResetToken,
-    },
-  });
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10_000);
 
-  const data = await response.json();
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/demo/reset`, {
+      method: "POST",
+      headers: {
+        "X-Demo-Token": demoResetToken,
+      },
+      signal: controller.signal,
+    });
 
-  return NextResponse.json(data, {
-    status: response.status,
-  });
+    const data = await response.json();
+
+    return NextResponse.json(data, {
+      status: response.status,
+    });
+  } catch {
+    return NextResponse.json(
+      { detail: "Demo reset service is currently unavailable." },
+      { status: 503 }
+    );
+  } finally {
+    clearTimeout(timeout);
+  }
 }
