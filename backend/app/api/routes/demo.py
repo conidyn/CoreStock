@@ -1,3 +1,4 @@
+import secrets
 import time
 
 from fastapi import APIRouter, Header, HTTPException, status
@@ -26,7 +27,11 @@ def reset_demo_environment(
             detail="Demo data reset is currently unavailable.",
         )
 
-    if not settings.demo_reset_token or x_demo_token != settings.demo_reset_token:
+    if (
+        not settings.demo_reset_token
+        or not x_demo_token
+        or not secrets.compare_digest(x_demo_token, settings.demo_reset_token)
+    ):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="You are not authorized to perform this action.",
