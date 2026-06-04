@@ -1,29 +1,70 @@
-# CoreStock
+# CoreStock V1
 
-🚧 In Progress
+CoreStock is a full-stack inventory and warehouse management application inspired by real ERP and WMS workflows.
 
-CoreStock is a backend-focused inventory management project inspired by ERP/WMS workflows used in logistics environments.
+The project was built to explore practical stock management concepts such as products, warehouses, inventory quantities, stock movements, low-stock monitoring, and demo environment management.
 
-Initially started as a learning project, it is now being redesigned with a stronger focus on backend architecture, stock consistency and ERP-oriented business logic.
+## Live Demo
 
-## Current Features
+**Application:** https://corestock-v1.vercel.app
 
-- Products
-- Stock locations
-- Stock items
-- Stock movements
-- Internal / Supplier / Customer locations
-- Stock transfer validation
-- Insufficient stock protection
-- PostgreSQL + SQLAlchemy
-- FastAPI API
-- Docker environment
-- Pytest tests
+The application is publicly deployed and includes a resettable demo environment, allowing inventory workflows to be tested from a clean and consistent state.
+
+## Features
+
+* Product catalog management
+* Warehouse and location management
+* Inventory tracking across locations
+* Purchase, sale, and transfer stock movements
+* Low-stock monitoring
+* Dashboard with inventory statistics
+* Resettable demo environment
+
+## Tech Stack
+
+### Backend
+
+* Python
+* FastAPI
+* Pydantic
+* SQLAlchemy
+* Alembic
+* PostgreSQL
+* Pytest
+
+### Frontend
+
+* Next.js
+* React
+* TypeScript
+* Tailwind CSS
+
+### Deployment
+
+* Vercel (Frontend)
+* Railway (Backend)
+* Supabase (PostgreSQL Database)
 
 ## Architecture
 
-```txt
-api → services → repositories → database
+CoreStock follows a modern full-stack architecture:
+
+```text
+Next.js Frontend
+        ↓
+FastAPI REST API
+        ↓
+PostgreSQL Database
 ```
 
-This project is actively being developed.
+The frontend consumes REST endpoints exposed by the FastAPI backend, while SQLAlchemy handles data access and Alembic manages database migrations.
+
+## Screenshot
+
+### Dashboard
+
+![CoreStock Dashboard](public/projects/corestock/dashboard.png)
+
+## Purpose
+
+This project was created to demonstrate practical full-stack development skills through a realistic inventory management workflow inspired by ERP and warehouse management systems.
