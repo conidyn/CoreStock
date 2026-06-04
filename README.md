@@ -63,7 +63,7 @@ The frontend consumes REST endpoints exposed by the FastAPI backend, while SQLAl
 
 ### Dashboard
 
-![CoreStock Dashboard](public/projects/corestock/dashboard.png)
+![CoreStock Dashboard](docs/images/dashboard.png)
 
 ## Purpose
 
